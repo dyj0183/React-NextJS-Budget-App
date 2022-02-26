@@ -3,8 +3,18 @@ import classess from "./auth-form.module.css";
 const AuthForm = () => {
 	return (
 		<div>
-			<h1>Welcome to My Auth Form!</h1>
-			<p>This is a test!</p>
+			<form>
+				<div>
+					<label htmlFor="email">Email</label>
+					<br />
+					<input type="email" id="email" name="email" />
+				</div>
+				<div>
+					<label htmlFor="password">Password</label>
+					<br />
+					<input type="text" id="password" name="password" />
+				</div>
+			</form>
 		</div>
 	);
 };
