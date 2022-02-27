@@ -1,6 +1,6 @@
-// since we are calling the api endpoint, this is an async function
+// this function calls the backend api to create a new user (an async function)
 export const CreateUser = async (email, password) => {
-	//call the backend api to create a new user
+
 	const response = await fetch("/api/auth/signup", {
 		method: "POST",
 		body: JSON.stringify({ email, password }),
