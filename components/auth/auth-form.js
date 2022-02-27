@@ -4,6 +4,15 @@ import { useState } from "react";
 const AuthForm = () => {
 	const [chooseLogin, setChooseLogin] = useState(true);
 
+	// this toggles between login and sign up
+	const switchAuthModeHandler = () => {
+		if (chooseLogin) {
+			setChooseLogin(false);
+		} else {
+			setChooseLogin(true);
+		}
+	};
+
 	return (
 		<div className={classes.card}>
 			<h1>{chooseLogin ? "Login" : "Sign Up"}</h1>
@@ -19,8 +28,16 @@ const AuthForm = () => {
 					<input type="text" id="password" name="password" />
 				</div>
 				<div>
-					<button className={classes.authButton}>{chooseLogin ? 'Login' : 'Create Account'}</button>
-                    <button type="button" className={classes.toggleButton}>{chooseLogin ? 'Create new account' : 'Login with existing account'}</button>
+					<button className={classes.authButton}>
+						{chooseLogin ? "Login" : "Create Account"}
+					</button>
+					<button
+						type="button"
+						className={classes.toggleButton}
+						onClick={switchAuthModeHandler}
+					>
+						{chooseLogin ? "Create new account" : "Login with existing account"}
+					</button>
 				</div>
 			</form>
 		</div>
