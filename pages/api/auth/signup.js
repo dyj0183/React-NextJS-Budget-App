@@ -1,18 +1,19 @@
 import { connectToMongoDB } from "../../../helper/mongodb";
+import { hashPassword } from "../../../helper/bcrypt";
 
-// this is the api endpoint for signing up (create) a new user
+// This is the api endpoint for signing up (create) a new user
 const SignupHandler = async (req, res) => {
-	// the request must be POST because we are creating a new user
+	// The request must be POST because we are creating a new user
 	if (req.method !== "POST") {
 		return;
 	}
 
-	// get the data from frontend, use destructuring to access them
+	// Get the data from frontend, use destructuring to access them
 	const data = req.body;
 	const { email, password } = data;
 
-	// do backend data error validation in case frontend error checking got disabled
-	// password must be at least 6 characters long
+	// Do backend data error validation in case frontend error checking got disabled
+	// Password must be at least 6 characters long
 	if (
 		!email ||
 		!email.includes("@") ||
@@ -30,9 +31,13 @@ const SignupHandler = async (req, res) => {
 	// connect to the database
 	const db = mongoClient.db();
 
+	// I need to hash the password before I save it into database
+	const hashedPassword = await hashPassword(password);
+
+	// Insert a new user into the "users" collection
 	const result = await db.collection("users").insertOne({
 		email: email,
-		password: password,
+		password: hashedPassword,
 	});
 
 	console.log(result);
