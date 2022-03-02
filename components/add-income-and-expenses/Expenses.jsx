@@ -13,6 +13,8 @@ export default function Expenses({ onFinish, onBack }) {
                         <option value='Monthly'>Monthly</option>
                         <option value='Bi-Monthly'>Bi-Monthly</option>
                     </Select>
+                    <Select placeholder="Category">
+                    </Select>
                 </HStack>
                 <HStack w={'100%'} justify={'space-between'}>
                     <Button onClick={onBack}>Back</Button>
