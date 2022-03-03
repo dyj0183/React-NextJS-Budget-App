@@ -21,7 +21,7 @@ export default function Summary() {
 
   return (
     <Flex justify="space-around">
-      <Box>
+      <Box borderWidth="1px" borderRadius="lg">
         <Table>
           <TableCaption placement="top">Expenses</TableCaption>
           <Thead>
