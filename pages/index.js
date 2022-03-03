@@ -1,9 +1,10 @@
 import styles from "../styles/Home.module.css";
 import {
   Flex,
-  VStack,
-  Heading,
+  Stack,
+  Box,
   Table,
+  TableCaption,
   Thead,
   Tbody,
   Th,
@@ -14,47 +15,48 @@ import {
   StatLabel,
   StatNumber,
 } from "@chakra-ui/react";
+import { useMediaQuery } from "@chakra-ui/react";
 
 export default function Home() {
+  const [isSmallScreen] = useMediaQuery("(max-width: 1280px)");
+
   return (
-    <div className={styles.container}>
-      <main>
-        <Flex justify="space-around">
-          <section>
-            <Heading as="h2" size="md">
-              Expenses
-            </Heading>
-            <Table>
-              <Thead>
-                <Tr>
-                  <Th>Name</Th>
-                  <Th>Frequency</Th>
-                  <Th>Amount</Th>
-                  <Th>Annual Amount</Th>
-                </Tr>
-              </Thead>
-              <Tbody></Tbody>
-            </Table>
-          </section>
-          <section>
-            <VStack align="flex-start" spacing="3rem">
-              <StatGroup>
-                <Stat>
-                  <StatLabel>Total Income</StatLabel>
-                  <StatNumber>$100</StatNumber>
-                </Stat>
-                {/* Generate stats for individual incomes */}
-              </StatGroup>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>Remaining Balance</StatLabel>
-                  <StatNumber>${/* Display remaining */}</StatNumber>
-                </Stat>
-              </StatGroup>
-            </VStack>
-          </section>
-        </Flex>
-      </main>
-    </div>
+    <Flex justify="space-around">
+      <Box>
+        <Table>
+          <TableCaption placement="top">Expenses</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Th>Frequency</Th>
+              <Th>Amount</Th>
+              <Th>Annual Amount</Th>
+            </Tr>
+          </Thead>
+          <Tbody></Tbody>
+        </Table>
+      </Box>
+      <Stack
+        direction={isSmallScreen ? "column" : "row"}
+        borderWidth="1px"
+        borderRadius="lg"
+        padding="1rem"
+        spacing="1rem"
+      >
+        <StatGroup borderWidth="1px" borderRadius="lg" padding="1rem">
+          <Stat>
+            <StatLabel>Total Income</StatLabel>
+            <StatNumber>$100</StatNumber>
+          </Stat>
+          {/* Generate stats for individual incomes */}
+        </StatGroup>
+        <StatGroup borderWidth="1px" borderRadius="lg" padding="1rem">
+          <Stat>
+            <StatLabel>Remaining Balance</StatLabel>
+            <StatNumber>${/* Display remaining */}</StatNumber>
+          </Stat>
+        </StatGroup>
+      </Stack>
+    </Flex>
   );
 }

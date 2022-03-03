@@ -21,6 +21,7 @@ function MyApp({ Component, pageProps }) {
           borderBottom="1px solid black"
           h="4rem"
           padding="1rem"
+          marginBottom="1rem"
         >
           <Link href="/">MY LOGO</Link>
           <HStack spacing="2rem">
