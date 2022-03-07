@@ -1,5 +1,5 @@
 import { Center, Container } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Expenses from "../../components/add-income-and-expenses/Expenses";
 import Income from "../../components/add-income-and-expenses/Income";
 import Show from "../../components/utility/Show";
@@ -10,7 +10,6 @@ export default function AddIncomeAndExpense() {
     const [data, setData] = useState({})
 
     const onToExpenses = (result) => {
-        console.log(result)
         setData(prev => {
             return {
                 ...prev,
@@ -21,7 +20,6 @@ export default function AddIncomeAndExpense() {
     }
     
     const onFinish = (result) => {
-        console.log(result)
         setData(prev => {
             return {
                 ...prev,
@@ -33,6 +31,10 @@ export default function AddIncomeAndExpense() {
     const onBack = () => {
         setPage('income')
     }
+
+    useEffect(() => {
+        console.log(data)
+    }, [ data ])
 
 
     return (
