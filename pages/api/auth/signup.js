@@ -31,6 +31,16 @@ const SignupHandler = async (req, res) => {
 	// connect to the database
 	const db = mongoClient.db();
 
+	// Need to make sure no duplcated email is used to sign up
+	const existingUser = await db.collection("users").findOne({ email: email });
+
+	if (existingUser) {
+		res.status(422).json({ message: "User exists already." });
+		// Make sure to close database connection
+		mongoClient.close();
+		return;
+	}
+
 	// I need to hash the password before I save it into database
 	const hashedPassword = await hashPassword(password);
 
