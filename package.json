@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^1.8.5",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
+    "bcryptjs": "^2.4.3",
     "framer-motion": "^6.2.8",
     "jotai": "^1.6.0",
     "mongodb": "^4.4.0",
