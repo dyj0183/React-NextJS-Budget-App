@@ -1,0 +1,26 @@
+.card {
+    margin: 3rem auto;
+    max-width: 25rem;
+    width: 90%;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    background-color: coral;
+}
+
+.authButton {
+    background-color: cornflowerblue;
+    max-width: 15rem;
+    margin: 1rem auto;
+    padding: 0.5rem 1.5rem;
+    display: block;
+    color: white;
+}
+
+.toggleButton {
+    margin: 1rem auto;
+    padding: 0.5rem 1.5rem;
+    display: block;
+    color: white;
+}
