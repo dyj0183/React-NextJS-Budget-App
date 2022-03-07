@@ -59,6 +59,7 @@ const AuthForm = () => {
 						type="text"
 						id="password"
 						name="password"
+						placeholder="At least 7 characters"
 						ref={passwordInputRef}
 					/>
 				</div>
