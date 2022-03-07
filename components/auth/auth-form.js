@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
-import classes from "./auth-form.module.css";
+// Use next-auth for frontend login authentication
+import { signIn } from "next-auth/client";
 
+import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
 
 const AuthForm = () => {
@@ -31,6 +33,21 @@ const AuthForm = () => {
 
 		// if the users want to login, called backend to login
 		if (chooseLogin) {
+			// This is from Next-Auth
+			// When errors happened on the backend, we want to stay on login page, so no redirect
+			// signIn will always return a promise even though there is an error, the error can be found in the object's error message
+			const result = await signIn("credentials", {
+				redirect: false,
+				email: enteredEmail,
+				password: enteredPassword,
+			});
+
+			console.log(result);
+
+			if (!result.error) {
+				// no error, log the user in
+
+			}
 		} else {
 			// otherwise, call CreateUser function
 			try {
