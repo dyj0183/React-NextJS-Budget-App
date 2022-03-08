@@ -11,7 +11,7 @@ function Test() {
 	console.log(loading);
 
 	const logoutHandler = () => {
-		// Sign out, nextjs will clear out the cookie
+		// Sign out, nextjs will clear out the cookie and session
 		signOut();
 	};
 

@@ -5,7 +5,7 @@ import { signIn } from "next-auth/client";
 import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
 
-import Test from "./test";
+import Test from "./fake_navbar";
 
 const AuthForm = () => {
 	// set up this state to know whether users want to login or create new account
