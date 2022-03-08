@@ -5,6 +5,8 @@ import { signIn } from "next-auth/client";
 import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
 
+import Test from "./test";
+
 const AuthForm = () => {
 	// set up this state to know whether users want to login or create new account
 	const [chooseLogin, setChooseLogin] = useState(true);
@@ -46,7 +48,6 @@ const AuthForm = () => {
 
 			if (!result.error) {
 				// no error, log the user in
-
 			}
 		} else {
 			// otherwise, call CreateUser function
@@ -61,38 +62,43 @@ const AuthForm = () => {
 	};
 
 	return (
-		<div className={classes.card}>
-			<h1>{chooseLogin ? "Login" : "Sign Up"}</h1>
-			<form onSubmit={formSubmitHandler}>
-				<div>
-					<label htmlFor="email">Email</label>
-					<br />
-					<input type="email" id="email" name="email" ref={emailInputRef} />
-				</div>
-				<div>
-					<label htmlFor="password">Password</label>
-					<br />
-					<input
-						type="text"
-						id="password"
-						name="password"
-						placeholder="At least 7 characters"
-						ref={passwordInputRef}
-					/>
-				</div>
-				<div>
-					<button className={classes.authButton}>
-						{chooseLogin ? "Login" : "Create Account"}
-					</button>
-					<button
-						type="button"
-						className={classes.toggleButton}
-						onClick={switchAuthModeHandler}
-					>
-						{chooseLogin ? "Create new account" : "Login with existing account"}
-					</button>
-				</div>
-			</form>
+		<div>
+			<Test></Test>
+			<div className={classes.card}>
+				<h1>{chooseLogin ? "Login" : "Sign Up"}</h1>
+				<form onSubmit={formSubmitHandler}>
+					<div>
+						<label htmlFor="email">Email</label>
+						<br />
+						<input type="email" id="email" name="email" ref={emailInputRef} />
+					</div>
+					<div>
+						<label htmlFor="password">Password</label>
+						<br />
+						<input
+							type="text"
+							id="password"
+							name="password"
+							placeholder="At least 7 characters"
+							ref={passwordInputRef}
+						/>
+					</div>
+					<div>
+						<button className={classes.authButton}>
+							{chooseLogin ? "Login" : "Create Account"}
+						</button>
+						<button
+							type="button"
+							className={classes.toggleButton}
+							onClick={switchAuthModeHandler}
+						>
+							{chooseLogin
+								? "Create new account"
+								: "Login with existing account"}
+						</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	);
 };
