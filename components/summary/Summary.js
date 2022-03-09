@@ -1,96 +1,115 @@
-import {
-  Flex,
-  Stack,
-  Box,
-  Table,
-  TableCaption,
-  Thead,
-  Tbody,
-  Th,
-  Tr,
-  Td,
-  StatGroup,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-} from "@chakra-ui/react";
+import { useState, useEffect, useCallback } from "react";
+import ExpenseTable from "./ExpenseTable";
+import IncomeStats from "./IncomeStats";
+import { Stack } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 
-export default function Summary(props) {
+export default function Summary() {
+  const [incomes, setIncomes] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  /******************** DISPLAY FUNCS ********************/
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  const accumAnnualAmount = (items) =>
+    items.reduce((sum, i) => i.annualAmountNum + sum, 0);
+  const calcAnnualAmount = (amount, frequency) => {
+    switch (frequency) {
+      case "daily":
+        return amount * 365;
+      case "weekly":
+        return amount * 52;
+      case "biweekly":
+        return amount * 26;
+      case "monthly":
+        return amount * 12;
+      case "annually":
+        return amount;
+      default:
+        return amount;
+    }
+  };
+  const calcRemainingBalance = (incomes, expenses) => {
+    return accumAnnualAmount(incomes) - accumAnnualAmount(expenses);
+  };
+
+  /******************** DATA SETUP ********************/
+  const fetchBudgetHandler = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+
+    // TODO: get user id
+    try {
+      const userId = "1";
+      const response = await fetch(`/api/summary/${userId}`);
+      if (!response.ok) throw new Error("Failed to get user budget data");
+      const data = await response.json();
+
+      const loadedIncomes = [];
+      for (const key in data.incomes) {
+        let income = data.incomes[key];
+        loadedIncomes.push({
+          id: key,
+          name: income.name,
+          amountNum: income.amount,
+          amount: formatter.format(income.amount),
+          frequency: income.frequency,
+          annualAmountNum: calcAnnualAmount(income.amount, income.frequency),
+          annualAmount: formatter.format(
+            calcAnnualAmount(income.amount, income.frequency)
+          ),
+        });
+      }
+      setIncomes(loadedIncomes);
+
+      const loadedExpenses = [];
+      for (const key in data.expenses) {
+        let expense = data.expenses[key];
+        loadedExpenses.push({
+          id: key,
+          name: expense.name,
+          amountNum: expense.amount,
+          amount: formatter.format(expense.amount),
+          frequency: expense.frequency,
+          category: expense.category,
+          annualAmountNum: calcAnnualAmount(expense.amount, expense.frequency),
+          annualAmount: formatter.format(
+            calcAnnualAmount(expense.amount, expense.frequency)
+          ),
+        });
+      }
+      setExpenses(loadedExpenses);
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchBudgetHandler();
+  }, [fetchBudgetHandler]);
+
   const [isSmallScreen] = useMediaQuery("(max-width: 1280px)");
 
-  const displayDollar = (amount) => {
-    // return `$${amount}`;
-  };
-  const calcTotalIncome = (incomes) => {};
-  const calcAnnualAmount = (amount, frequency) => {};
-  const calcRemainingBalance = () => {};
-
   return (
-    <Flex justify="space-around">
-      <Box borderWidth="1px" borderRadius="lg">
-        <Table>
-          <TableCaption placement="top">Expenses</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Category</Th>
-              <Th>Frequency</Th>
-              <Th>Amount</Th>
-              <Th>Annual Amount</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {props.data.expenses
-              .sort((a, b) => a.category - b.category)
-              .map((e) => (
-                <Tr>
-                  <Td>{e.name}</Td>
-                  <Td>{e.category}</Td>
-                  <Td>{e.frequency}</Td>
-                  <Td>{e.amount}</Td>
-                  <Td>
-                    {displayDollar(calcAnnualAmount(e.amount, e.frequency))}
-                  </Td>
-                </Tr>
-              ))}
-          </Tbody>
-        </Table>
-      </Box>
-      <Stack
-        direction={isSmallScreen ? "column" : "row"}
-        borderWidth="1px"
-        borderRadius="lg"
-        padding="1rem"
-        spacing="1rem"
-      >
-        <StatGroup borderWidth="1px" borderRadius="lg" padding="1rem">
-          <Stat>
-            <StatLabel>Total Annual Income</StatLabel>
-            <StatNumber>
-              {displayDollar(calcTotalIncome(props.data.incomes))}
-            </StatNumber>
-          </Stat>
-          {props.data.incomes.map((i) => (
-            <Stat>
-              <StatLabel>{i.name}</StatLabel>
-              <StatNumber>
-                {displayDollar(calcAnnualAmount(i.amount, i.frequency))}
-              </StatNumber>
-              <StatHelpText>
-                {displayDollar(i.amount)} {i.frequency}
-              </StatHelpText>
-            </Stat>
-          ))}
-        </StatGroup>
-        <StatGroup borderWidth="1px" borderRadius="lg" padding="1rem">
-          <Stat>
-            <StatLabel>Remaining Balance</StatLabel>
-            <StatNumber>{displayDollar(calcRemainingBalance())}</StatNumber>
-          </Stat>
-        </StatGroup>
-      </Stack>
-    </Flex>
+    <Stack
+      direction={isSmallScreen ? "column" : "row"}
+      padding="1rem"
+      spacing="1rem"
+      justify="space-around"
+    >
+      <ExpenseTable expenses={expenses} />
+      <IncomeStats
+        incomes={incomes}
+        totalIncome={formatter.format(accumAnnualAmount(incomes))}
+        remainingBalance={formatter.format(
+          calcRemainingBalance(incomes, expenses)
+        )}
+      />
+    </Stack>
   );
 }
