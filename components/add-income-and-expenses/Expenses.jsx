@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import ReactSelect from "react-select/creatable";
 
-export default function Expenses({ onFinish, onBack }) {
+export default function Expenses({ onFinish, onBack, loading }) {
   const [categories, setCategories] = useState([]);
 
   const { register, control, watch } = useForm({
@@ -99,6 +99,7 @@ export default function Expenses({ onFinish, onBack }) {
         </Button>
         <Button
           isFullWidth
+          isLoading={loading}
           colorScheme={"blue"}
           onClick={() => onFinish(fieldValues)}
         >
