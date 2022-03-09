@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import ExpenseTable from "./ExpenseTable";
 import IncomeStats from "./IncomeStats";
-import { Center, Link, Spinner, Stack } from "@chakra-ui/react";
+import { Center, Link, Spinner, Stack, Box } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 
 export default function Summary({ userId }) {
@@ -123,13 +123,15 @@ export default function Summary({ userId }) {
         justify="space-around"
       >
         <ExpenseTable expenses={expenses} />
-        <IncomeStats
-          incomes={incomes}
-          totalIncome={formatter.format(accumAnnualAmount(incomes))}
-          remainingBalance={formatter.format(
-            calcRemainingBalance(incomes, expenses)
-          )}
-        />
+        <Box>
+          <IncomeStats
+            incomes={incomes}
+            totalIncome={formatter.format(accumAnnualAmount(incomes))}
+            remainingBalance={formatter.format(
+              calcRemainingBalance(incomes, expenses)
+            )}
+          />
+        </Box>
       </Stack>
     </>
   );

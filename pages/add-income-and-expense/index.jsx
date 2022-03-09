@@ -5,12 +5,15 @@ import Income from "../../components/add-income-and-expenses/Income";
 import Show from "../../components/utility/Show";
 import { useAtom } from 'jotai';
 import { userIdAtom } from '../../store/atom'
+import { useRouter } from "next/router";
 
 export default function AddIncomeAndExpense() {
 
     const [page, setPage] = useState('income')
     const [data, setData] = useState({})
+    const [loading, setLoading] = useState(false)
     const [userId] = useAtom(userIdAtom)
+    const router = useRouter()
 
     const onToExpenses = (result) => {
         setData(prev => {
@@ -41,6 +44,7 @@ export default function AddIncomeAndExpense() {
 
         if (!(data.incomes && data.expenses && userId)) return
 
+        setLoading(true)
         const expenses = data.expenses.map(expense => {
             return {
                 ...expense,
@@ -50,12 +54,13 @@ export default function AddIncomeAndExpense() {
 
         fetch('/api/insert-incomes-and-expenses', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, expenses, userId }) })
             .then(() => {
-                // TODO: navigate to summary
+                setLoading(false)
+                router.replace('/')
             })
             .catch((err) => {
                 console.error(err)
             })
-    }, [data, userId])
+    }, [data, userId, router])
 
     return (
         <Container maxW='container.lg'>
@@ -64,7 +69,7 @@ export default function AddIncomeAndExpense() {
                     <Income onToExpenses={onToExpenses} />
                 </Show>
                 <Show show={page == 'expenses'}>
-                    <Expenses onFinish={onFinish} onBack={onBack} />
+                    <Expenses onFinish={onFinish} onBack={onBack} loading={loading} />
                 </Show>
             </Center>
         </Container>
