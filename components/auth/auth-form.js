@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
+import { GetUserID } from "./auth-get-user-id";
 
 import Test from "./fake_navbar";
 
@@ -47,10 +48,13 @@ const AuthForm = () => {
 				password: enteredPassword,
 			});
 
-			console.log("sign in result");
-			console.log(result);
 
 			if (!result.error) {
+				// I want to get the unique user id from database
+				const userId = await GetUserID(); 
+				console.log("data got back from api");
+				console.log(userId)
+
 				// no error, log the user in, redirect to the main page (index.js) for now
 				router.replace("/");
 			}
