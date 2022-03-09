@@ -1,16 +1,31 @@
-import { Fragment, useState } from "react";
-import AuthForm from "../components/auth/auth-form";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+// import { useSession } from "next-auth/client";
+import { useAtom } from "jotai";
+import { userIdAtom } from "../store/atom";
+
+// import AuthForm from "../components/auth/auth-form";
 import Summary from "../components/summary/Summary";
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-  // TODO: set userId with session
-  const userId = "621d742436c291324f692b38";
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [session, loading] = useSession();
+  const [userId] = useAtom(userIdAtom);
+  const router = useRouter();
 
-  return (
-    <Fragment>
-      {!isLoggedIn && <AuthForm />}
-      {isLoggedIn && <Summary userId={userId} />}
-    </Fragment>
-  );
+  useEffect(() => {
+    if (userId === null) {
+      router.replace("/auth");
+    }
+  }, []);
+
+  // Set up !isLoggedIn to prevent infinite loop
+  if (userId !== null && !isLoggedIn) {
+    setIsLoggedIn(true);
+
+    console.log("home page user id");
+    console.log(userId);
+  }
+
+  return <Summary userId={userId} />;
 }
