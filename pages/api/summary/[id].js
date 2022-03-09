@@ -1,13 +1,7 @@
 import { connectToMongoDB } from "../../../helper/mongodb";
 
 export default async function summaryHandler(req, res) {
-  var userId;
-  try {
-    // TODO: check for if the user is logged in with session and get their user id into the request body
-    userId = "621d742436c291324f692b38";
-  } catch (err) {
-    // handle not logged in or bad user id
-  }
+  var userId = req.query.id;
 
   try {
     // get mongo connection

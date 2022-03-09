@@ -4,7 +4,7 @@ import IncomeStats from "./IncomeStats";
 import { Stack } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 
-export default function Summary() {
+export default function Summary({ userId }) {
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,6 @@ export default function Summary() {
 
     // TODO: get user id
     try {
-      const userId = "1";
       const response = await fetch(`/api/summary/${userId}`);
       if (!response.ok) throw new Error("Failed to get user budget data");
       const data = await response.json();
