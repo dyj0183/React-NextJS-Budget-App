@@ -48,10 +48,9 @@ const AuthForm = () => {
 				password: enteredPassword,
 			});
 
-
 			if (!result.error) {
 				// I want to get the unique user id from database
-				const userId = await GetUserID(); 
+				const userId = await GetUserID(enteredEmail);
 				console.log("data got back from api");
 				console.log(userId)
 

@@ -1,24 +1,23 @@
 import { connectToMongoDB } from "../../../helper/mongodb";
-// import { useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
 
 const GetUserIdHandler = async (req, res) => {
-	// const [session, loading] = useSession();
+	const session = await getSession();
+	if (session) {
+		console.log("get session returned");
+		console.log(session);
+		// console.log("fake summary page");
+		// console.log(session.user.email);
+		// const userEmail = session.user.email;
 
-	res.status(200).json({ userid: '1' })
+		// const mongoClient = await connectToMongoDB();
+		// const db = mongoClient.db();
 
-	// if (session) {
-	// 	console.log("fake summary page");
-	// 	console.log(session.user.email);
-	// 	const userEmail = session.user.email;
+		// const existingUser = db.collection("users").findOne({ email: userEmail });
+		// console.log(existingUser);
 
-	// 	const mongoClient = await connectToMongoDB();
-	// 	const db = mongoClient.db();
-
-	// 	const existingUser = db.collection("users").findOne({ email: userEmail });
-	// 	console.log(existingUser);
-
-	// 	res.status(200).json({ testuser: existingUser });
-	// }
+		res.status(200).json({ userId: 1 });
+	}
 };
 
 export default GetUserIdHandler;
