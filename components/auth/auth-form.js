@@ -1,13 +1,23 @@
 import { useState, useRef } from "react";
 // Use next-auth for frontend login authentication
 import { signIn } from "next-auth/client";
+import { useRouter } from "next/router";
 
 import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
+import { GetUserID } from "./auth-get-user-id";
+
+// Use Jotai to manage and consume userId
+import { useAtom } from "jotai";
+import { userIdAtom } from "../../store/atom";
 
 const AuthForm = () => {
 	// set up this state to know whether users want to login or create new account
 	const [chooseLogin, setChooseLogin] = useState(true);
+	// Set up the router from next.js
+	const router = useRouter();
+	// Jotai, by default, we set to null for userIdAtom
+	const [userId, setUserId] = useAtom(userIdAtom);
 
 	// useRef can help us get user input of email and password
 	const emailInputRef = useRef();
@@ -42,11 +52,16 @@ const AuthForm = () => {
 				password: enteredPassword,
 			});
 
-			console.log(result);
-
 			if (!result.error) {
-				// no error, log the user in
+				// Get the unique user id from database
+				const mongoUserObject = await GetUserID(enteredEmail);
+				const mongoUserId = mongoUserObject.userId;
+				console.log("data got back from api");
+				console.log(mongoUserId);
+				setUserId(mongoUserId);
 
+				// no error, log the user in, redirect to the main page (index.js) for now
+				router.replace("/");
 			}
 		} else {
 			// otherwise, call CreateUser function
@@ -61,38 +76,53 @@ const AuthForm = () => {
 	};
 
 	return (
-		<div className={classes.card}>
-			<h1>{chooseLogin ? "Login" : "Sign Up"}</h1>
-			<form onSubmit={formSubmitHandler}>
-				<div>
-					<label htmlFor="email">Email</label>
-					<br />
-					<input type="email" id="email" name="email" ref={emailInputRef} />
-				</div>
-				<div>
-					<label htmlFor="password">Password</label>
-					<br />
-					<input
-						type="text"
-						id="password"
-						name="password"
-						placeholder="At least 7 characters"
-						ref={passwordInputRef}
-					/>
-				</div>
-				<div>
-					<button className={classes.authButton}>
-						{chooseLogin ? "Login" : "Create Account"}
-					</button>
-					<button
-						type="button"
-						className={classes.toggleButton}
-						onClick={switchAuthModeHandler}
-					>
-						{chooseLogin ? "Create new account" : "Login with existing account"}
-					</button>
-				</div>
-			</form>
+		<div>
+			<div className={classes.card}>
+				<h1 className={classes.headerText}>
+					{chooseLogin ? "Login" : "Sign Up"}
+				</h1>
+				<form onSubmit={formSubmitHandler}>
+					<div>
+						<label htmlFor="email">Email</label>
+						<br />
+						<input
+							type="email"
+							id="email"
+							name="email"
+							ref={emailInputRef}
+							required
+							className={classes.inputField}
+						/>
+					</div>
+					<div>
+						<label htmlFor="password">Password</label>
+						<br />
+						<input
+							type="text"
+							id="password"
+							name="password"
+							placeholder="At least 7 characters"
+							ref={passwordInputRef}
+							required
+							className={classes.inputField}
+						/>
+					</div>
+					<div>
+						<button className={classes.authButton}>
+							{chooseLogin ? "Login" : "Create Account"}
+						</button>
+						<button
+							type="button"
+							className={classes.toggleButton}
+							onClick={switchAuthModeHandler}
+						>
+							{chooseLogin
+								? "No account yet? Create new account"
+								: "Login with existing account"}
+						</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	);
 };
