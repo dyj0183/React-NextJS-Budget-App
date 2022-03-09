@@ -1,23 +1,23 @@
 import { connectToMongoDB } from "../../../helper/mongodb";
-import { getSession } from "next-auth/client";
 
 const GetUserIdHandler = async (req, res) => {
-	const session = await getSession();
-	if (session) {
-		console.log("get session returned");
-		console.log(session);
-		// console.log("fake summary page");
-		// console.log(session.user.email);
-		// const userEmail = session.user.email;
-
-		// const mongoClient = await connectToMongoDB();
-		// const db = mongoClient.db();
-
-		// const existingUser = db.collection("users").findOne({ email: userEmail });
-		// console.log(existingUser);
-
-		res.status(200).json({ userId: 1 });
+	if (req.method !== "POST") {
+		return;
 	}
+
+	// Get the data from frontend, use destructuring to access them
+	const data = req.body;
+	const { email } = data;
+
+	const mongoClient = await connectToMongoDB();
+	const db = mongoClient.db();
+
+	const existingUser = await db.collection("users").findOne({ email: email });
+	console.log("The existing user id in string");
+	console.log(existingUser._id.toString());
+
+	res.status(200).json({ userId: "1" });
+	mongoClient.close();
 };
 
 export default GetUserIdHandler;

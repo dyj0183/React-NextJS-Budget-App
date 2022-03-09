@@ -1,5 +1,5 @@
 // this function calls the backend api to get unique user id for the entire project to use
-export const GetUserID = async (enteredEmail) => {
+export const GetUserID = async (email) => {
 	const response = await fetch("/api/auth/getUserId", {
 		method: "POST",
 		body: JSON.stringify({ email }),
