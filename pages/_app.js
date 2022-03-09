@@ -2,6 +2,7 @@ import "../styles/globals.css";
 
 import { ChakraProvider, extendTheme, HStack } from "@chakra-ui/react";
 import { Provider } from "next-auth/client";
+import { Provider as JotaiProvider } from "jotai";
 import Head from "next/head";
 import Link from "next/link";
 
@@ -9,6 +10,7 @@ const theme = extendTheme({});
 
 function MyApp({ Component, pageProps }) {
   return (
+  <JotaiProvider>
     <ChakraProvider theme={theme}>
       <Provider session={pageProps.session}>
         <Head>
@@ -32,6 +34,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </Provider>
     </ChakraProvider>
+  </JotaiProvider>
   );
 }
 
