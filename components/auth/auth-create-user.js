@@ -8,10 +8,12 @@ export const CreateUser = async (email, password) => {
 		},
 	});
 
+	const data = await response.json();
+
 	if (!response.ok) {
-		throw new Error("Failed to create a new user");
+		// throw new Error(data.message);
+		document.getElementById("emailError").innerHTML = data.message;	
 	}
 
-	const data = await response.json();
 	return data;
 };

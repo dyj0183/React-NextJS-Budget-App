@@ -95,6 +95,9 @@ const AuthForm = () => {
 						/>
 					</div>
 					<div>
+						<p id="emailError" style={{color: "red"}}></p>
+					</div>
+					<div>
 						<label htmlFor="password">Password</label>
 						<br />
 						<input

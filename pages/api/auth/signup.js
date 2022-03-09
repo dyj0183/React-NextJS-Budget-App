@@ -35,7 +35,7 @@ const SignupHandler = async (req, res) => {
 	const existingUser = await db.collection("users").findOne({ email: email });
 
 	if (existingUser) {
-		res.status(422).json({ message: "User exists already." });
+		res.status(422).json({ message: "User exists already. Please use a different email." });
 		// Make sure to close database connection
 		mongoClient.close();
 		return;
