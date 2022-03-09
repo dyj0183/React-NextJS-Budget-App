@@ -8,9 +8,11 @@ export default async function handler(req, res) {
         const mongoClient = await connectToMongoDB()
         const db = mongoClient.db()
         // TODO: use the currently logged in user's id
-        await db.collection('budgets').updateOne({ userId: "621d742436c291324f692b39" }, { 
-            $set: { ...body }
+        await db.collection('budgets').updateOne({ userId: body.userId }, { 
+            $set: { incomes: body.incomes, expenses: body.expenses }
         }, { upsert: true })
+
+        mongoClient.close()
 
         return res.status(200).end()
     }
