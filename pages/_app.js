@@ -1,20 +1,21 @@
-import '../styles/globals.css'
+import "../styles/globals.css";
 
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { Provider } from "next-auth/client";
+import { Provider as JotaiProvider } from "jotai";
 
-const theme = extendTheme({
-
-})
+const theme = extendTheme({});
 
 function MyApp({ Component, pageProps }) {
-  return (
-    <ChakraProvider theme={theme}>
-      <Provider session={pageProps.session}>
-        <Component {...pageProps} />
-      </Provider>
-    </ChakraProvider>
-  )
+	return (
+		<JotaiProvider>
+			<ChakraProvider theme={theme}>
+				<Provider session={pageProps.session}>
+					<Component {...pageProps} />
+				</Provider>
+			</ChakraProvider>
+		</JotaiProvider>
+	);
 }
 
-export default MyApp
+export default MyApp;
