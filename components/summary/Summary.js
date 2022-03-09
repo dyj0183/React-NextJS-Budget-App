@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import ExpenseTable from "./ExpenseTable";
 import IncomeStats from "./IncomeStats";
-import { Center, Spinner, Stack } from "@chakra-ui/react";
+import { Center, Link, Spinner, Stack } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 
 export default function Summary({ userId }) {
@@ -18,6 +18,7 @@ export default function Summary({ userId }) {
   const accumAnnualAmount = (items) =>
     items.reduce((sum, i) => i.annualAmountNum + sum, 0);
   const calcAnnualAmount = (amount, frequency) => {
+    frequency = frequency.toLowerCase().replace("-", "");
     switch (frequency) {
       case "daily":
         return amount * 365;
@@ -25,8 +26,12 @@ export default function Summary({ userId }) {
         return amount * 52;
       case "biweekly":
         return amount * 26;
+      case "bimonthly":
+        return amount * 24;
       case "monthly":
         return amount * 12;
+      case "biannually":
+        return amount * 2;
       case "annually":
         return amount;
       default:
@@ -84,8 +89,10 @@ export default function Summary({ userId }) {
       setExpenses(loadedExpenses);
     } catch (err) {
       setError(err.message);
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -99,6 +106,14 @@ export default function Summary({ userId }) {
       {isLoading && (
         <Center>
           <Spinner size="xl" />
+        </Center>
+      )}
+      {error && (
+        <Center>
+          <p>{error}.&nbsp;</p>
+          <Link color="teal.500" to="/add-income-and-expense">
+            Try adding a budget.
+          </Link>
         </Center>
       )}
       <Stack
