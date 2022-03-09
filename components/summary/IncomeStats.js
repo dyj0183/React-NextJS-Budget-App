@@ -30,7 +30,7 @@ export default function IncomeStats({
         </Stat>
         {incomes !== undefined &&
           incomes.map((i) => (
-            <Stat key={i.id}>
+            <Stat key={i.id} paddingLeft="1rem">
               <StatLabel>{i.name}</StatLabel>
               <StatNumber>{i.annualAmount}</StatNumber>
               <StatHelpText>

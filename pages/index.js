@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 // import { useSession } from "next-auth/client";
 import { useAtom } from "jotai";
@@ -27,5 +27,5 @@ export default function Home() {
     console.log(userId);
   }
 
-  return <Summary userId={userId} />;
+  return <Fragment>{isLoggedIn && <Summary userId={userId} />}</Fragment>;
 }
