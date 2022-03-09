@@ -52,7 +52,7 @@ const AuthForm = () => {
 				// I want to get the unique user id from database
 				const userId = await GetUserID(enteredEmail);
 				console.log("data got back from api");
-				console.log(userId)
+				console.log(userId);
 
 				// no error, log the user in, redirect to the main page (index.js) for now
 				router.replace("/");

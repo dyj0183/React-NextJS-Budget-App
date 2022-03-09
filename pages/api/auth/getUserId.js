@@ -13,10 +13,9 @@ const GetUserIdHandler = async (req, res) => {
 	const db = mongoClient.db();
 
 	const existingUser = await db.collection("users").findOne({ email: email });
-	console.log("The existing user id in string");
-	console.log(existingUser._id.toString());
+	const userId = existingUser._id.toString();
 
-	res.status(200).json({ userId: "1" });
+	res.status(201).json({ userId: userId });
 	mongoClient.close();
 };
 
