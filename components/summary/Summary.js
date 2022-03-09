@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import ExpenseTable from "./ExpenseTable";
 import IncomeStats from "./IncomeStats";
-import { Stack } from "@chakra-ui/react";
+import { Center, Spinner, Stack } from "@chakra-ui/react";
 import { useMediaQuery } from "@chakra-ui/react";
 
 export default function Summary({ userId }) {
@@ -95,20 +95,27 @@ export default function Summary({ userId }) {
   const [isSmallScreen] = useMediaQuery("(max-width: 1280px)");
 
   return (
-    <Stack
-      direction={isSmallScreen ? "column" : "row"}
-      padding="1rem"
-      spacing="1rem"
-      justify="space-around"
-    >
-      <ExpenseTable expenses={expenses} />
-      <IncomeStats
-        incomes={incomes}
-        totalIncome={formatter.format(accumAnnualAmount(incomes))}
-        remainingBalance={formatter.format(
-          calcRemainingBalance(incomes, expenses)
-        )}
-      />
-    </Stack>
+    <>
+      {isLoading && (
+        <Center>
+          <Spinner size="xl" />
+        </Center>
+      )}
+      <Stack
+        direction={isSmallScreen ? "column" : "row"}
+        padding="1rem"
+        spacing="1rem"
+        justify="space-around"
+      >
+        <ExpenseTable expenses={expenses} />
+        <IncomeStats
+          incomes={incomes}
+          totalIncome={formatter.format(accumAnnualAmount(incomes))}
+          remainingBalance={formatter.format(
+            calcRemainingBalance(incomes, expenses)
+          )}
+        />
+      </Stack>
+    </>
   );
 }
