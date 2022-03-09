@@ -7,6 +7,9 @@ import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
 import { GetUserID } from "./auth-get-user-id";
 
+import { useAtom } from "jotai";
+import { userIdAtom } from "../../store/atom";
+
 import Test from "./fake_navbar";
 
 const AuthForm = () => {
@@ -14,6 +17,8 @@ const AuthForm = () => {
 	const [chooseLogin, setChooseLogin] = useState(true);
 	// Set up the router from next.js
 	const router = useRouter();
+	// Jotai, by default, we set to null for userIdAtom
+	const [userId, setUserId] = useAtom(userIdAtom);
 
 	// useRef can help us get user input of email and password
 	const emailInputRef = useRef();
@@ -50,9 +55,10 @@ const AuthForm = () => {
 
 			if (!result.error) {
 				// I want to get the unique user id from database
-				const userId = await GetUserID(enteredEmail);
+				const mongoUserId = (await GetUserID(enteredEmail)).userId;
 				console.log("data got back from api");
-				console.log(userId);
+				console.log(mongoUserId);
+				setUserId(mongoUserId);
 
 				// no error, log the user in, redirect to the main page (index.js) for now
 				router.replace("/");
