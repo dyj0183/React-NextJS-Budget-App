@@ -78,12 +78,21 @@ const AuthForm = () => {
 	return (
 		<div>
 			<div className={classes.card}>
-				<h1>{chooseLogin ? "Login" : "Sign Up"}</h1>
+				<h1 className={classes.headerText}>
+					{chooseLogin ? "Login" : "Sign Up"}
+				</h1>
 				<form onSubmit={formSubmitHandler}>
 					<div>
 						<label htmlFor="email">Email</label>
 						<br />
-						<input type="email" id="email" name="email" ref={emailInputRef} />
+						<input
+							type="email"
+							id="email"
+							name="email"
+							ref={emailInputRef}
+							required
+							className={classes.inputField}
+						/>
 					</div>
 					<div>
 						<label htmlFor="password">Password</label>
@@ -94,6 +103,8 @@ const AuthForm = () => {
 							name="password"
 							placeholder="At least 7 characters"
 							ref={passwordInputRef}
+							required
+							className={classes.inputField}
 						/>
 					</div>
 					<div>
@@ -106,7 +117,7 @@ const AuthForm = () => {
 							onClick={switchAuthModeHandler}
 						>
 							{chooseLogin
-								? "Create new account"
+								? "No account yet? Create new account"
 								: "Login with existing account"}
 						</button>
 					</div>
