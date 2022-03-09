@@ -2,6 +2,10 @@ import { connectToMongoDB } from "../../../helper/mongodb";
 
 export default async function summaryHandler(req, res) {
   var userId = req.query.id;
+  if (userId === undefined) {
+    res.status(401);
+    return;
+  }
 
   try {
     // get mongo connection
@@ -10,12 +14,17 @@ export default async function summaryHandler(req, res) {
     const db = mongoClient.db();
 
     const summary = await db.collection("budgets").findOne({ userId: userId });
+    if (summary === null) {
+      res.status(404);
+      mongoClient.close();
+      return;
+    }
     res.status(200).json({
       incomes: summary.incomes,
       expenses: summary.expenses,
     });
+    mongoClient.close();
   } catch (err) {
-    // handle no budget found
-    // handle other problems
+    res.status(500);
   }
 }
