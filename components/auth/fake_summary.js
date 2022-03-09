@@ -6,7 +6,7 @@ import { userIdAtom } from "../../store/atom";
 function Fake_summary() {
 	const [session, loading] = useSession();
 
-    // Jotai, by default, we set to null for userIdAtom
+    // Here, we can consume the userId
 	const [userId] = useAtom(userIdAtom);
 
 	if (loading) {
