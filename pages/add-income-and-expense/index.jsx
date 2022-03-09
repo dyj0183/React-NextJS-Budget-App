@@ -18,8 +18,8 @@ export default function AddIncomeAndExpense() {
         })
         setPage('expenses')
     }
-    
-    const onFinish = (result) => {
+
+    const onFinish = async (result) => {
         setData(prev => {
             return {
                 ...prev,
@@ -33,9 +33,23 @@ export default function AddIncomeAndExpense() {
     }
 
     useEffect(() => {
-        console.log(data)
-    }, [ data ])
+        if (!(data.incomes && data.expenses)) return
 
+        const expenses = data.expenses.map(expense => {
+            return {
+                ...expense,
+                category: expense.category.value
+            }
+        })
+
+        fetch('/api/insert-incomes-and-expenses', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...data, expenses }) })
+            .then(() => {
+                // TODO: navigate to summary
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+    }, [data])
 
     return (
         <Container maxW='container.lg'>
