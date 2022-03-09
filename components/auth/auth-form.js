@@ -11,8 +11,6 @@ import { GetUserID } from "./auth-get-user-id";
 import { useAtom } from "jotai";
 import { userIdAtom } from "../../store/atom";
 
-import Test from "./fake_navbar";
-
 const AuthForm = () => {
 	// set up this state to know whether users want to login or create new account
 	const [chooseLogin, setChooseLogin] = useState(true);
@@ -79,14 +77,22 @@ const AuthForm = () => {
 
 	return (
 		<div>
-			<Test></Test>
 			<div className={classes.card}>
-				<h1>{chooseLogin ? "Login" : "Sign Up"}</h1>
+				<h1 className={classes.headerText}>
+					{chooseLogin ? "Login" : "Sign Up"}
+				</h1>
 				<form onSubmit={formSubmitHandler}>
 					<div>
 						<label htmlFor="email">Email</label>
 						<br />
-						<input type="email" id="email" name="email" ref={emailInputRef} />
+						<input
+							type="email"
+							id="email"
+							name="email"
+							ref={emailInputRef}
+							required
+							className={classes.inputField}
+						/>
 					</div>
 					<div>
 						<label htmlFor="password">Password</label>
@@ -97,6 +103,8 @@ const AuthForm = () => {
 							name="password"
 							placeholder="At least 7 characters"
 							ref={passwordInputRef}
+							required
+							className={classes.inputField}
 						/>
 					</div>
 					<div>
@@ -109,7 +117,7 @@ const AuthForm = () => {
 							onClick={switchAuthModeHandler}
 						>
 							{chooseLogin
-								? "Create new account"
+								? "No account yet? Create new account"
 								: "Login with existing account"}
 						</button>
 					</div>
