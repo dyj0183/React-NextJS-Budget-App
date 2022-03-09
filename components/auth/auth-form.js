@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 // Use next-auth for frontend login authentication
 import { signIn } from "next-auth/client";
+import { useRouter } from "next/router";
 
 import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
@@ -10,6 +11,8 @@ import Test from "./fake_navbar";
 const AuthForm = () => {
 	// set up this state to know whether users want to login or create new account
 	const [chooseLogin, setChooseLogin] = useState(true);
+	// Set up the router from next.js
+	const router = useRouter();
 
 	// useRef can help us get user input of email and password
 	const emailInputRef = useRef();
@@ -44,10 +47,12 @@ const AuthForm = () => {
 				password: enteredPassword,
 			});
 
+			console.log("sign in result");
 			console.log(result);
 
 			if (!result.error) {
-				// no error, log the user in
+				// no error, log the user in, redirect to the main page (index.js) for now
+				router.replace("/");
 			}
 		} else {
 			// otherwise, call CreateUser function
