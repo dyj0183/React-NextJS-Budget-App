@@ -69,6 +69,9 @@ const AuthForm = () => {
 				// CreateUser is an async function, so we need to wait for the response data
 				const result = await CreateUser(enteredEmail, enteredPassword);
 				console.log(result);
+
+				// Redirect to the login form after creating an account successfully
+				router.replace("/");
 			} catch (error) {
 				console.log(error);
 			}
