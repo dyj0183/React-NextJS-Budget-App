@@ -18,7 +18,7 @@ const SignupHandler = async (req, res) => {
 		!email ||
 		!email.includes("@") ||
 		!password ||
-		!password.trim().length <= 7
+		password.trim().length < 7
 	) {
 		res.status(422).json({
 			message: "Invalid input. Please check the input requirements.",
