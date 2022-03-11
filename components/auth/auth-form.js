@@ -70,8 +70,10 @@ const AuthForm = () => {
 				const result = await CreateUser(enteredEmail, enteredPassword);
 				console.log(result);
 
-				// Redirect to the login form after creating an account successfully
-				router.replace("/");
+				if (result.status === "succeed") {
+					// Redirect to the login form after creating an account successfully
+					router.replace("/");
+				}
 			} catch (error) {
 				console.log(error);
 			}
@@ -98,7 +100,7 @@ const AuthForm = () => {
 						/>
 					</div>
 					<div>
-						<p id="emailError" style={{color: "red"}}></p>
+						<p id="emailError" style={{ color: "red" }}></p>
 					</div>
 					<div>
 						<label htmlFor="password">Password</label>
@@ -114,7 +116,13 @@ const AuthForm = () => {
 						/>
 					</div>
 					<div>
-						<p id="generalError" style={{color: "red", marginTop: "10px"}}></p>
+						<p id="passwordError" style={{ color: "red" }}></p>
+					</div>
+					<div>
+						<p
+							id="generalError"
+							style={{ color: "red", marginTop: "10px" }}
+						></p>
 					</div>
 					<div>
 						<button className={classes.authButton}>
