@@ -18,10 +18,10 @@ const SignupHandler = async (req, res) => {
 		!email ||
 		!email.includes("@") ||
 		!password ||
-		!password.trim().length >= 7
+		!password.trim().length <= 7
 	) {
 		res.status(422).json({
-			message: "Invalid input",
+			message: "Invalid input. Please check the input requirements.",
 		});
 		return;
 	}
@@ -35,7 +35,9 @@ const SignupHandler = async (req, res) => {
 	const existingUser = await db.collection("users").findOne({ email: email });
 
 	if (existingUser) {
-		res.status(422).json({ message: "User exists already. Please use a different email." });
+		res
+			.status(422)
+			.json({ message: "User already exists. Please use a different email.", errorType: "email" });
 		// Make sure to close database connection
 		mongoClient.close();
 		return;
@@ -49,8 +51,6 @@ const SignupHandler = async (req, res) => {
 		email: email,
 		password: hashedPassword,
 	});
-
-	console.log(result);
 
 	res.status(201).json({ message: "Created User Successfully!" });
 	mongoClient.close();

@@ -12,7 +12,12 @@ export const CreateUser = async (email, password) => {
 
 	if (!response.ok) {
 		// throw new Error(data.message);
-		document.getElementById("emailError").innerHTML = data.message;	
+		if (data.errorType === "email") {
+			document.getElementById("emailError").innerHTML = data.message;	
+		} else {
+			// display general error message
+			document.getElementById("generalError").innerHTML = data.message;	
+		}
 	}
 
 	return data;

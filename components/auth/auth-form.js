@@ -111,6 +111,9 @@ const AuthForm = () => {
 						/>
 					</div>
 					<div>
+						<p id="generalError" style={{color: "red", marginTop: "10px"}}></p>
+					</div>
+					<div>
 						<button className={classes.authButton}>
 							{chooseLogin ? "Login" : "Create Account"}
 						</button>
