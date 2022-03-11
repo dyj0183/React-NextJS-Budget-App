@@ -9,10 +9,17 @@ export const CreateUser = async (email, password) => {
 	});
 
 	const data = await response.json();
-
 	if (!response.ok) {
 		// throw new Error(data.message);
-		document.getElementById("emailError").innerHTML = data.message;	
+		if (data.errorType === "email") {
+			document.getElementById("emailError").innerHTML = data.message;	
+		} else if (data.errorType === "password") {
+			// display general error message
+			document.getElementById("passwordError").innerHTML = data.message;	
+		} else {
+			// display general error message
+			document.getElementById("generalError").innerHTML = data.message;	
+		}
 	}
 
 	return data;

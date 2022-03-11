@@ -18,17 +18,22 @@ export default NextAuth({
 					email: credentials.email,
 				});
 
+				if (credentials.email === "" || credentials.password === "") {
+					mongoClient.close();
+					throw new Error("Empty field is not allowed."); 
+				}
+
 				if (!user) {
 					mongoClient.close();
-					throw new Error("No user found");
+					throw new Error("No user found with this email address.");
 				}
 
 				// Verify the password
-				const isValid = verifyPassword(credentials.password, user.password);
+				const isValid = await verifyPassword(credentials.password, user.password);
 
 				if (!isValid) {
 					mongoClient.close();
-					throw new Error("Password doesn't match. Please try again");
+					throw new Error("Password doesn't match. Please try again.");
 				}
 
 				mongoClient.close();
