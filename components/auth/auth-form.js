@@ -56,8 +56,8 @@ const AuthForm = () => {
 				// Get the unique user id from database
 				const mongoUserObject = await GetUserID(enteredEmail);
 				const mongoUserId = mongoUserObject.userId;
-				console.log("data got back from api");
-				console.log(mongoUserId);
+			
+				// Set up the Mongo user id for the entire app to use
 				setUserId(mongoUserId);
 
 				// no error, log the user in, redirect to the main page (index.js) for now
