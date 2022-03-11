@@ -52,6 +52,12 @@ const AuthForm = () => {
 				password: enteredPassword,
 			});
 
+			document.getElementById("generalError").innerHTML = "";	
+			// If there is any error message
+			if (result.error) {
+				document.getElementById("generalError").innerHTML = result.error;
+			}
+
 			if (!result.error) {
 				// Get the unique user id from database
 				const mongoUserObject = await GetUserID(enteredEmail);
