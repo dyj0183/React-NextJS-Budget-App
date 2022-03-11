@@ -3,6 +3,8 @@ import { useState, useRef } from "react";
 import { signIn } from "next-auth/client";
 import { useRouter } from "next/router";
 
+import { Center, Spinner } from "@chakra-ui/react";
+
 import classes from "./auth-form.module.css";
 import { CreateUser } from "./auth-create-user";
 import { GetUserID } from "./auth-get-user-id";
@@ -14,6 +16,8 @@ import { userIdAtom } from "../../store/atom";
 const AuthForm = () => {
 	// set up this state to know whether users want to login or create new account
 	const [chooseLogin, setChooseLogin] = useState(true);
+	// Set up this for spinner to show up when loading to create account or log user in
+	const [isLoading, setIsLoading] = useState(false);
 	// Set up the router from next.js
 	const router = useRouter();
 	// Jotai, by default, we set to null for userIdAtom
@@ -23,8 +27,12 @@ const AuthForm = () => {
 	const emailInputRef = useRef();
 	const passwordInputRef = useRef();
 
-	// this toggles between login and sign up options
+	// Toggle between login and sign up options
 	const switchAuthModeHandler = () => {
+		// Clean out all the old error message when toggling
+		document.getElementById("generalError").innerHTML = "";
+		document.getElementById("emailError").innerHTML = "";
+		document.getElementById("passwordError").innerHTML = "";
 		if (chooseLogin) {
 			setChooseLogin(false);
 		} else {
@@ -34,6 +42,12 @@ const AuthForm = () => {
 
 	// use async here because we call backend api to create user below
 	const formSubmitHandler = async (event) => {
+		// First clean out all the old error message
+		document.getElementById("generalError").innerHTML = "";
+		document.getElementById("emailError").innerHTML = "";
+		document.getElementById("passwordError").innerHTML = "";
+
+		setIsLoading(true);
 		// we want to prevent default form submission because we need to validate data first
 		event.preventDefault();
 
@@ -52,10 +66,10 @@ const AuthForm = () => {
 				password: enteredPassword,
 			});
 
-			document.getElementById("generalError").innerHTML = "";	
 			// If there is any error message
 			if (result.error) {
 				document.getElementById("generalError").innerHTML = result.error;
+				setIsLoading(false);
 			}
 
 			if (!result.error) {
@@ -65,6 +79,7 @@ const AuthForm = () => {
 			
 				// Set up the Mongo user id for the entire app to use
 				setUserId(mongoUserId);
+				setIsLoading(false);
 
 				// no error, log the user in, redirect to the main page (index.js) for now
 				router.replace("/");
@@ -74,13 +89,14 @@ const AuthForm = () => {
 			try {
 				// CreateUser is an async function, so we need to wait for the response data
 				const result = await CreateUser(enteredEmail, enteredPassword);
-				console.log(result);
 
+				setIsLoading(false);
 				if (result.status === "succeed") {
 					// Redirect to the login form after creating an account successfully
 					router.replace("/");
 				}
 			} catch (error) {
+				setIsLoading(false);
 				console.log(error);
 			}
 		}
@@ -88,6 +104,11 @@ const AuthForm = () => {
 
 	return (
 		<div>
+			{isLoading && (
+				<Center>
+					<Spinner size="xl" />
+				</Center>
+			)}
 			<div className={classes.card}>
 				<h1 className={classes.headerText}>
 					{chooseLogin ? "Login" : "Sign Up"}
