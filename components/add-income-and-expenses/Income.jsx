@@ -1,9 +1,10 @@
 import { Button, HStack, Input, Select, Text, VStack } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 
-export default function Income({ onToExpenses }) {
+export default function Income({ onToExpenses, previousData }) {
 
-    const { register, control, watch } = useForm({
+    const { register, control, watch, reset } = useForm({
         defaultValues: {
             incomes: [{ name: "", amount: "", frequency: "Weekly" }]
         }
@@ -19,6 +20,12 @@ export default function Income({ onToExpenses }) {
     })
 
     const fieldValues = watch()
+
+    useEffect(() => {
+        if (previousData) {
+            reset(previousData)
+        }
+    }, [previousData, reset])
 
     return (
         <VStack w={'100%'} align={'start'}>

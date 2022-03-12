@@ -11,6 +11,7 @@ export default function AddIncomeAndExpense() {
 
     const [page, setPage] = useState('income')
     const [data, setData] = useState({})
+    const [previousData, setPreviousData] = useState({})
     const [loading, setLoading] = useState(false)
     const [userId] = useAtom(userIdAtom)
     const router = useRouter()
@@ -26,26 +27,15 @@ export default function AddIncomeAndExpense() {
     }
 
     const onFinish = async (result) => {
-        setData(prev => {
-            return {
-                ...prev,
-                ...result
-            }
-        })
-    }
+        const tempData = {
+            ...data,
+            ...result
+        }
 
-    const onBack = () => {
-        setPage('income')
-    }
-
-    useEffect(() => {
-
-        console.log(userId)
-
-        if (!(data.incomes && data.expenses && userId)) return
+        if (!(tempData.incomes && tempData.expenses && userId)) return
 
         setLoading(true)
-        const expenses = data.expenses.map(expense => {
+        const expenses = tempData.expenses.map(expense => {
             return {
                 ...expense,
                 category: expense.category.value
@@ -60,16 +50,32 @@ export default function AddIncomeAndExpense() {
             .catch((err) => {
                 console.error(err)
             })
-    }, [data, userId, router])
+    }
+
+    const onBack = () => {
+        setPage('income')
+    }
+
+    useEffect(() => {
+
+        if (!userId) return router.replace('/auth')
+
+        fetch(`/api/summary/${userId}`)
+            .then(res => res.json())
+            .then(res => {
+                setPreviousData(res)
+            })
+            .catch(err => console.error(err))
+    }, [userId, router])
 
     return (
         <Container maxW='container.lg'>
             <Center h={'80vh'}>
                 <Show show={page == 'income'}>
-                    <Income onToExpenses={onToExpenses} />
+                    <Income previousData={previousData} onToExpenses={onToExpenses} />
                 </Show>
                 <Show show={page == 'expenses'}>
-                    <Expenses onFinish={onFinish} onBack={onBack} loading={loading} />
+                    <Expenses previousData={previousData} onFinish={onFinish} onBack={onBack} loading={loading} />
                 </Show>
             </Center>
         </Container>

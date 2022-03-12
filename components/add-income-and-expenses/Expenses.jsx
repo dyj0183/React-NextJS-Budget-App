@@ -7,14 +7,15 @@ import {
   Select,
   Box,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import ReactSelect from "react-select/creatable";
 
-export default function Expenses({ onFinish, onBack, loading }) {
+export default function Expenses({ onFinish, onBack, loading, previousData }) {
   const [categories, setCategories] = useState([]);
 
-  const { register, control, watch } = useForm({
+
+  const { register, control, watch, reset } = useForm({
     defaultValues: {
       expenses: [
         { name: "", amount: "", frequency: "Weekly", category: "Category" },
@@ -28,6 +29,12 @@ export default function Expenses({ onFinish, onBack, loading }) {
   });
 
   const fieldValues = watch();
+
+  useEffect(() => {
+    if (previousData) {
+        reset(previousData)
+    }
+}, [previousData, reset])
 
   return (
     <VStack w={"100%"} align={"start"}>
