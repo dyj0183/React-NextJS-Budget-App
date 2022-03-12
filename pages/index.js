@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { useRouter } from "next/router";
-// import { useSession } from "next-auth/client";
+
 import { useAtom } from "jotai";
 import { userIdAtom } from "../store/atom";
 
@@ -9,7 +9,7 @@ import Summary from "../components/summary/Summary";
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [session, loading] = useSession();
+  
   const [userId] = useAtom(userIdAtom);
   const router = useRouter();
 

@@ -16,6 +16,11 @@ export default function AddIncomeAndExpense() {
     const [userId] = useAtom(userIdAtom)
     const router = useRouter()
 
+    // Make sure only users who login can see the Edit Budge page 
+    if (userId === null) {
+        router.replace("/auth");
+    }
+
     const onToExpenses = (result) => {
         setData(prev => {
             return {
