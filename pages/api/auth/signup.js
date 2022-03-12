@@ -13,15 +13,18 @@ const SignupHandler = async (req, res) => {
 	const { email, password } = data;
 
 	// Do backend data error validation in case frontend error checking got disabled
-	// Password must be at least 6 characters long
-	if (
-		!email ||
-		!email.includes("@") ||
-		!password ||
-		!password.trim().length >= 7
-	) {
+	// Password must be at least 7 characters long
+	if (!email || !email.includes("@") || !password) {
 		res.status(422).json({
-			message: "Invalid input",
+			message: "No empty or invalid input is allowed.",
+		});
+		return;
+	}
+
+	if (password.trim().length < 7) {
+		res.status(422).json({
+			message: "Please make sure the password has at least 7 characters.",
+			errorType: "password",
 		});
 		return;
 	}
@@ -35,7 +38,10 @@ const SignupHandler = async (req, res) => {
 	const existingUser = await db.collection("users").findOne({ email: email });
 
 	if (existingUser) {
-		res.status(422).json({ message: "User exists already. Please use a different email." });
+		res.status(422).json({
+			message: "User already exists. Please use a different email.",
+			errorType: "email",
+		});
 		// Make sure to close database connection
 		mongoClient.close();
 		return;
@@ -50,9 +56,7 @@ const SignupHandler = async (req, res) => {
 		password: hashedPassword,
 	});
 
-	console.log(result);
-
-	res.status(201).json({ message: "Created User Successfully!" });
+	res.status(201).json({ message: "Created User Successfully!", status: "succeed" });
 	mongoClient.close();
 };
 
