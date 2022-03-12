@@ -28,7 +28,11 @@ export default function ExpenseTable({ expenses }) {
             expenses
               .sort((a, b) => a.category - b.category)
               .map((e) => (
-                <Tr key={e.id}>
+                <Tr
+                  key={e.id}
+                  _hover={{ backgroundColor: "blue.50" }}
+                  transitionDuration="600ms"
+                >
                   <Td>{e.name}</Td>
                   <Td>{e.category}</Td>
                   <Td>{e.frequency}</Td>

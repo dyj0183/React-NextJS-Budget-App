@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Palanquin+Dark&display=swap");
+
 html,
 body {
   padding: 0;
@@ -13,4 +15,8 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.logo {
+  font-family: "Palanquin Dark", sans-serif;
 }
